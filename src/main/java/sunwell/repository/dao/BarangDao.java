@@ -5,14 +5,10 @@
  */
 package sunwell.repository.dao;
 
-import java.util.LinkedList;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import sunwell.entity.Barang;
+
+import javax.persistence.*;
+import java.util.List;
 
 /**
  *
@@ -113,5 +109,26 @@ public class BarangDao
         em.getTransaction().commit();
         
         return n > 0;
+    }
+    
+    public Barang editBarang(Barang b)
+    {
+        em.getTransaction().begin();
+        em.merge(b);
+        em.getTransaction().commit();
+        return b;
+    }
+    
+    public boolean deleteBarang(int id)
+    {
+        Barang brgToBeDeleted = findById(id);
+        if (brgToBeDeleted == null)
+            return false;
+        
+        em.getTransaction().begin();
+        em.remove(brgToBeDeleted);
+        em.getTransaction().commit();
+        
+        return true;
     }
 }

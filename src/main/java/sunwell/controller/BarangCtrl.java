@@ -6,15 +6,16 @@
  */
 package sunwell.controller;
 
-import java.util.LinkedList;
-import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import sunwell.entity.Barang;
+import sunwell.repository.BarangRepository;
 import sunwell.repository.dao.BarangDao;
 import sunwell.repository.util.JpaUtil;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -23,8 +24,30 @@ import sunwell.repository.util.JpaUtil;
 @RestController
 public class BarangCtrl 
 {
+    @Autowired
+    private BarangRepository barangRepo;
+    
     @GetMapping("/barang")
     public List<Barang> getAll(@RequestParam(value="id", required=false) Integer id)
+    {
+        //getAllViaDao(id);
+        return getAllViaSpringRepo(id);
+    }
+    
+    private List<Barang> getAllViaSpringRepo(Integer id)
+    {
+        // Tampung hasil query Spring Repo ke Iterable
+        Iterable<Barang> result = barangRepo.findAll();
+        
+        // Tuangkan data dari bentuk Iterable ke List
+        List<Barang> listBarang = new LinkedList();
+        for (Barang b : result)
+            listBarang.add(b);
+        
+        return listBarang;
+    }
+    
+    private List<Barang> getAllViaDao(Integer id)
     {
         // minta class DAO (Data Access Objek) utk baca dari database daftar barang.
         BarangDao dao = new BarangDao(JpaUtil.getEntityManagerFactory());
@@ -42,28 +65,36 @@ public class BarangCtrl
             return list;
         }
     }
-    
-    private Barang findById(int id)
+    @GetMapping("/barang/{id}")
+    private Barang findById(@PathVariable("id") int id)
     {
-        BarangDao dao = new BarangDao(JpaUtil.getEntityManagerFactory());
-        Barang b = dao.findById(id);
-        if (b == null)
-            return null;
-        
+//        BarangDao dao = new BarangDao(JpaUtil.getEntityManagerFactory());
+//        Barang b = dao.findById(id);
+//        if (b == null)
+//            return null;
+//        
+//        return b;
+        Optional<Barang> result = barangRepo.findById(id);
+        Barang b = result.get();
         return b;
     }
     
     @PostMapping("/barang")
     public Barang addBarang(@RequestParam(value="nama") String nm,
-                        @RequestParam(value="hrg") double hrg)
+                        @RequestParam(value="harga") double hrg)
     {
+//        Barang barang = new Barang();
+//        barang.setNama(nm);
+//        barang.setHarga(hrg);
+//        
+//        BarangDao dao = new BarangDao(JpaUtil.getEntityManagerFactory());
+//        barang = dao.create(barang);
+//        
+//        return barang;
         Barang barang = new Barang();
         barang.setNama(nm);
         barang.setHarga(hrg);
-        
-        BarangDao dao = new BarangDao(JpaUtil.getEntityManagerFactory());
-        barang = dao.create(barang);
-        
+        barangRepo.save(barang);
         return barang;
     }
     
@@ -89,5 +120,31 @@ public class BarangCtrl
         BarangDao dao = new BarangDao(JpaUtil.getEntityManagerFactory());
         
         return dao.deleteEfisienNativeSQL(id);
+    }
+    
+    @PatchMapping("/barang/{id}")
+    public Barang editBarang(
+        @RequestParam(value="nama") String nama,
+        @RequestParam(value="harga") double harga,
+        @PathVariable("id") int id)
+    {
+        Barang barangInDb = barangRepo.findById(id).get();
+        barangInDb.setId(id);
+        barangInDb.setNama(nama);
+        barangInDb.setHarga(harga);
+        
+//        BarangDao dao = new BarangDao(JpaUtil.getEntityManagerFactory());
+//        barang = dao.editBarang(barang);
+        barangRepo.save(barangInDb);
+        return barangInDb;
+    }
+    
+    @DeleteMapping("/barang/{id}")
+    public boolean deleteBarang(@PathVariable("id") int id)
+    {
+//        BarangDao dao = new BarangDao(JpaUtil.getEntityManagerFactory());
+//        return dao.deleteBarang(id);
+        barangRepo.deleteById(id);
+        return true;
     }
 }

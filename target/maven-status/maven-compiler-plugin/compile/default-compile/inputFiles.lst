@@ -1,1 +1,12 @@
-/media/aditgege/Project/Nexus-test/src/main/java/sunwell/MainApp.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/controller/BarangCtrl.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/entity/Barang.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/entity/BookCategory.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/entity/Book.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/repository/util/JpaUtil.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/MainApp.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/repository/BarangRepository.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/repository/BookCategoryRepository.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/JpaConfiguration.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/repository/dao/BarangDao.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/controller/BookManageCtrl.java
+/media/aditgege/latihan/Java/Nexus-test/src/main/java/sunwell/repository/BookRepository.java
